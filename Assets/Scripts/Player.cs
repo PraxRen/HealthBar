@@ -6,8 +6,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _maxHealth = 100;
-    [SerializeField] private float _damage = 10;
-    [SerializeField] private float _recovery = 10;
     [SerializeField] private ChangedHealthEvent _changedMaxHealthEvent;
     [SerializeField] private ChangedHealthEvent _changedHealthEvent;
 
@@ -20,23 +18,15 @@ public class Player : MonoBehaviour
         _changedMaxHealthEvent?.Invoke(_currentHealth);
     }
 
-    public void Attack()
+    public void Attack(float damage)
     {
-        _currentHealth -= _damage;
-
-        if(_currentHealth < _minHealth)
-            _currentHealth = _minHealth;
-
+        _currentHealth = Mathf.Clamp(_currentHealth - damage, _minHealth, _maxHealth);
         _changedHealthEvent?.Invoke(_currentHealth);
     }
 
-    public void Heal()
+    public void Heal(float recovery)
     {
-        _currentHealth += _recovery;
-
-        if (_currentHealth > _maxHealth)
-            _currentHealth = _maxHealth;
-
+        _currentHealth = Mathf.Clamp(_currentHealth + recovery, _minHealth, _maxHealth);
         _changedHealthEvent?.Invoke(_currentHealth);
     }
 }
